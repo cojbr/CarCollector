@@ -20,6 +20,44 @@
     <a href="{% url 'cars_delete' car.id %}">Delete</a>
   </div>
 </div>
+  <div class="col s6">
+    <form action="{% url 'add_maintenance' car.id %}" method="post">
+        {% csrf_token %}
+        {{ maintenance_form.as_p }}
+        <input type="submit" class="btn" value="Add Maintenance Record">
+      </form>
+    {% if car.maintained_today %}
+      <div class="card-panel teal-text center-align">Your {{car.year}} {{car.model}} {{car.make}} is running smoothly.</div>
+    {% else %}
+      <div class="card-panel red-text center-align">Your {{car.year}} {{car.model}} {{car.make}} might require maintenance.</div>
+    {% endif %}
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Last Maintenance</th></tr>
+      </thead>
+      <tbody>
+        {% for maintenance in car.maintenance_set.all %}
+          <tr>
+            <td>{{maintenance.date}}</td>
+            <td>{{maintenance.get_maintain_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
+<script>
+  var dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  var selectEl = document.getElementById('id_meal');
+    M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}

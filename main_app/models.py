@@ -27,17 +27,19 @@ class Car(models.Model):
     def get_absolute_url(self):
         return reverse('detail', kwargs={'car_id': self.id})
 
+    def maintained_today(self):
+        return self.maintenance_set.filter(date=date.today()).count() >= len(MAINTENANCE)
+
 class Maintenance(models.Model):
-    date = models.DateField('check date')
-    maintain = models.CharField(
-        max_length=1,
+    date = models.DateField('Vehicle last checked on')
+    maintain = models.CharField('Maintenance Type',
+        max_length=10,
         choices=MAINTENANCE,
         default=MAINTENANCE[0][0]
     )
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
 
     def __str__(self):
-
         return f"{self.get_maintain_display()} on {self.date}"
 
     # change the default sort
