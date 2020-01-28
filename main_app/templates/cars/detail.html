@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Car Details</h1>
+
+<a href="{% url 'detail' car.id %}">
+
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">{{ car.make }} {{ car.model }}</span>
+    <p>Description: {{ car.description }}</p>
+    {% if car.year > 2000 %}
+        <p>Year: {{ car.year }}</p>
+    {% else %}
+        <p>Vintage Status ( {{ car.year }} )</p>
+    {% endif %}
+  </div>
+    <div class="card-action">
+    <a href="{% url 'cars_update' car.id %}">Edit</a>
+    <a href="{% url 'cars_delete' car.id %}">Delete</a>
+  </div>
+</div>
+
+
+{% endblock %}
